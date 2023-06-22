@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <section class="site-section py-lg">
+        <div class="container">
+            <div class="row blog-entries element-animate">
+                <div class="col-md-12 col-lg-8 main-content">
+                    <img src="{{ obj.image.url }}" alt="Image" class="img-fluid mb-5">
+                    <div class="post-meta">
+                        <span class="author mr-2">
+                            {% if obj.author.image %}
+                                <img src="{{ obj.author.image.url }}">
+                            {% else %}
+                                <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                                     alt="">
+                            {% endif %}
+                            {{ obj.author.full_name }}</span>&bullet;
+                        <span class="mr-2"> {{ obj.created_date }} </span> &bullet;
+                        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                    </div>
+                    <h1 class="mb-4">{{ obj.title|safe }}</h1>
+                    <a class="category mb-5" href="#">{{ obj.category }}</a>
+                    {# <a class="category mb-5" href="#">Travel</a>#}
+                    <div class="post-content-body">
+                        <p>{{ obj.text|safe }}</p>
+
+
+                        <div class="row mb-5">
+                            {% for i in obj.subblog_set.all %}
+                                {% for j in i.imagesubblog_set.all %}
+                                    {% if j.is_vide %}
+                                        <div class="col-md-12 mb-4">
+                                            <img src="{{ j.picture.url }}" alt="Image placeholder"
+                                                 class="img-fluid">
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-6 mb-4">
+                                            <img src="{{ j.picture.url }}" alt="Image placeholder"
+                                                 class="img-fluid">
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <p>{{ obj.subblog_set.description|safe }}</p>
+                    </div>
+                    <div class="pt-5">
+                        <p>Categories: <a href="#">{{ obj.category }}</a>, Tags:
+                            {% for tag in obj.tags.all %}
+                                <a href="#">#{{ tag }}</a>,
+                            {% endfor %}
+
+
+                    </div>
+                    <div class="pt-5">
+                        <h3 class="mb-5">{{ obj.comment_set.count }} Comments</h3>
+                        <ul class="comment-list">
+                            {% for i in comments_reply %}
+                                <li class="comment">
+                                <div class="vcard">
+                                    {% if i.imege %}
+                                        <img src="{{ i.image.url }}" alt="Image placeholder">
+                                    {% else %}
+                                        <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                                             alt="" style="width: 75px">
+                                    {% endif %}
+                                </div>
+                                <div class="comment-body">
+                                    <h3>{{ i.name }}</h3>
+                                    <div class="meta">
+                                        {{ i.created_date|date:'F d, Y H:i' }}{#January 9, 2018 at 2:21pm#}</div>
+                                    <p>{{ i.text }}</p>
+                                    <p><a href="?reply_to_comment={{ i.id }}#comment " class="reply rounded" >Reply</a></p>
+                                </div>
+
+                                <ul class="children">
+                                    {% if i.comment_set.all %}
+                                        {% for j in i.get_children %}
+
+                                        <li class="comment">
+                                            <div class="vcard">
+                                                {% if j.image %}
+                                                    <img src="{{ j.image.url }}" alt="Image placeholder">
+                                                {% else %}
+                                                    <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                                                         alt="">
+                                                {% endif %}
+                                            </div>
+                                            <div class="comment-body">
+                                                <h3>{{ j.name }}</h3>
+                                                <h4><code>{{ j.name }}</code> to <code>{{ j.reply_to_comment }}</code></h4>
+                                                <div class="meta">
+                                                    {{ j.created_date|date:'F d, Y H:i' }}{#January 9, 2018 at 2:21pm#}</div>
+                                                <p>{{ j.text }}</p>
+                                                <p><a href="?reply_to_comment={{ j.id }} #comment" class="reply rounded">Reply</a></p>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+
+                            {% endfor %}
+
+                        </ul>
+
+                        <div class="comment-form-wrap pt-5">
+                            <h3 class="mb-5" id="comment">Leave a comment</h3>
+                            <form action="#" method="post" class="p-5 bg-light">
+                                {% csrf_token %}
+                                {% if not request.user.is_authenticated %}
+                                    <div class="form-group">
+                                        <label for="name">Name *</label>
+                                        {{ form.name }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email *</label>
+                                        {{ form.email }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="website">Image</label>
+                                        {{ form.image }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="website">Number</label>
+                                        {{ form.number }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    {{ form.text }}
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'sidebar.html' %}
+
+            </div>
+        </div>
+    </section>
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="mb-3 ">Related Post</h2>
+                </div>
+            </div>
+            <div class="row">
+                {% for i in obj1 %}
+                    <div class="col-md-6 col-lg-4">
+                        <a href="{{ i.full_url }}" class="a-block sm d-flex align-items-center height-md"
+                           style="background-image: url({{ i.image.url }}); ">
+                            <div class="text">
+                                <div class="post-meta">
+                                    <span class="category">{{ i.category }}</span>
+                                    <span class="mr-2">{{ i.day|date:'F d, Y' }} </span> &bullet;
+                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                                </div>
+                                <h3>{{ i.title|safe|slice:20 }}...</h3>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

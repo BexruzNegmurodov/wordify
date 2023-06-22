@@ -1,0 +1,87 @@
+{% load static %}
+{% load simple_tags %}
+{% category_my as category %}
+{% tags_my as tag %}
+{% popular_blogs as popular %}
+
+<div class="col-md-12 col-lg-4 sidebar">
+    <div class="sidebar-box search-form-wrap">
+        <form action="{% url 'blogs:blog-list' %}" class="search-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <span class="icon fa fa-search"></span>
+                <input type="text" name="q" class="form-control" id="s"
+                       placeholder="Type a keyword and hit enter">
+            </div>
+        </form>
+    </div>
+    {% if profile %}
+        <div class="sidebar-box">
+            <div class="bio text-center">
+                {% if profile.image %}
+                    <img src="{{ profile.image.url }}" alt="Image Placeholder" class="img-fluid">
+                {% else %}
+                    <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                         alt="Image Placeholder" class="img-fluid">
+                {% endif %}
+
+                <div class="bio-body">
+                    <h2>{{ profile.full_name }}</h2>
+                    <p>{{ profile.bio|safe|slice:150 }}...</p>
+                    <p><a href="{% url 'about:about' %}" class="btn btn-primary btn-sm rounded">Read my bio</a></p>
+                    <p class="social">
+                        <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
+                        <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
+                        <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
+                        <a href="#" class="p-2"><span class="fa fa-youtube-play"></span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="sidebar-box">
+        <h3 class="heading">Popular Posts</h3>
+        <div class="post-entry-sidebar">
+            <ul>
+                {% for i in popular %}
+                    <li>
+                        <a href="{{ i.full_url }}">
+                            <img src="{{ i.image.url }}" alt="Image placeholder" class="mr-4">
+                            <div class="text">
+                                <h4>{{ i.title|safe|slice:25 }}..</h4>
+                                <div class="post-meta">
+                                    <span class="mr-2"> {{ i.day|date:"F d, Y"  }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-box">
+        <h3 class="heading">Categories</h3>
+        <ul class="categories">
+
+            {% for i in category %}
+                <li><a href="{% url 'blogs:blog-list' %}?cat={{ i.title }}">{{ i }} <span>{{ i.blog_set.count }}</span></a>
+                </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+
+    <div class="sidebar-box">
+        <h3 class="heading">Tags</h3>
+        <ul class="tags">
+
+            {% for i in tag %}
+                <li><a href="{% url 'blogs:blog-list' %}?tag={{ i.title }}">{{ i }}</a></li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</div>

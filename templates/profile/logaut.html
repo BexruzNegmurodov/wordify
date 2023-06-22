@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logaut</title>
+</head>
+<body>
+{% load static %}
+<link rel="stylesheet" href="{% static "css1/main.css" %}">
+<div class="login">
+    <h1>Are you sure ??</h1>
+    <form method="post">
+        {% csrf_token %}
+        <a href="{% url 'main:home' %}" class="button button-green no-decoration ">NO</a>
+        <button type="submit" class="button button-red">Yes</button>
+    </form>
+</div>
+
+</body>
+</html>

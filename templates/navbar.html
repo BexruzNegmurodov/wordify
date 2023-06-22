@@ -1,0 +1,47 @@
+{% load static %}
+{% load simple_tags %}
+{% category_my as category %}
+{% tags_my as tag %}
+{% travel_my as travel %}
+<nav class="navbar navbar-expand-md  navbar-light bg-light">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'main:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blogs:blog-list' %}">Blogs</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Travel</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown04">
+                        {% for i in travel %}
+                            <a class="dropdown-item"
+                               href="{% url 'blogs:blog-list' %}?travel={{ i.title }}">{{ i.title }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="../about/category.html" id="dropdown05"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown05">
+                        {% for i in category %}
+                            <a class="dropdown-item"
+                               href="{% url 'blogs:blog-list' %}?cat={{ i.title }}">{{ i.title }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about:about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact:contact' %}">Contact</a>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <section class="site-section pt-5">
+        <div class="container">
+            <div class="row blog-entries">
+                <div class="col-md-12 col-lg-8 main-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="mb-4">Hi There! I'm {{ profile.full_name }}</h2>
+                            <p class="mb-5">
+                                {% if profile.image %}
+                                    <img src="{{ profile.image.url }}" alt="Image placeholder" class="img-fluid">
+                                {% else %}
+                                    <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                                         alt="" style="width: 100%">
+                                {% endif %}
+                            </p>
+                            <p>
+                                {{ profile.bio|safe }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row mb-5 mt-5">
+                        <div class="col-md-12 mb-5">
+                            <h2>My Latest Posts</h2>
+                        </div>
+
+                        {% for i in obj %}
+                            <div class="col-md-12">
+                                <div class="post-entry-horzontal">
+                                    <a href="../blogs/blog-single.html">
+                                        <div class="image" style="background-image: url({{ i.image.url }});"></div>
+                                        <span class="text">
+    <div class="post-meta">
+    <span class="author mr-2">
+        {% if i.author.image %}
+            <img src="{{ i.author.image.url }}">
+        {% else %}
+            <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}" alt="">
+        {% endif %}
+        {{ i.author.full_name }}</span>&bullet;
+    <span class="mr-2">March 15, 2018 </span> &bullet;
+    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+    </div>
+    <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
+    </span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <div class="row">
+                        {% include 'pagination.html' %}
+                    </div>
+                </div>
+
+                {% include 'sidebar.html' %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "css1/main.css" %}">
+    <section class="site-section pt-5 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme home-slider">
+                        {% for late in lates %}
+                            <div>
+                                <a href="{{ late.full_url }}" class="a-block d-flex align-items-center height-lg"
+                                   style="background-image: url({{ late.image.url }}); ">
+                                    <div class="text half-to-full">
+                                        <span class="category mb-5">{{ late.category }}</span>
+                                        <div class="post-meta">
+                                            <span class="author mr-2">
+                                            {% if late.author.image %}
+                                                <img src="{{ late.author.image.url }}" alt="Colorlib">
+                                             {% else %}
+                                                <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}" alt="">
+                                            {% endif %} 
+                                             {{ late.author }}</span>&bullet;
+                                            <span class="mr-2">{{ late.day|date:'F d, Y' }} </span> &bullet;
+                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                                        </div>
+                                        <h3>{{ late.title|safe|slice:25 }}...</h3>
+                                        <p>{{ late.text|safe|slice:50 }}..</p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section py-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" id="paginator">
+                    <h2 class="mb-4">Latest Posts</h2>
+                </div>
+            </div>
+            <div class="row blog-entries">
+                <div class="col-md-12 col-lg-8 main-content">
+                    <div class="row">
+                        {% for i in obj %}
+                            <div class="col-md-6">
+                                <a href="{{ i.full_url }}" class="blog-entry element-animate"
+                                   data-animate-effect="fadeIn">
+                                    <img src="{{ i.image.url }}" alt="Image placeholder">
+                                    <div class="blog-content-body">
+                                        <div class="post-meta">
+                                        <span class="author mr-2 mt-1">
+                                            {% if i.author.image %}
+                                                <img src="{{ i.author.image.url }}">
+                                            {% else %}
+                                                <img src="{% static 'images/1614570234_25-p-chernaya-golova-na-belom-fone-27.png' %}"
+                                                     alt="">
+                                            {% endif %}
+                                            {{ i.author.full_name }}</span>
+                                            <span class="mr-2">{{ i.day|date:"F d, Y"}}</span>
+                                            <br>
+                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                                            <span class="ml-2"><img src="{% static 'images/eye.png' %}" alt="" style="width: 18px" class="eye" > {{ i.views }}</span>
+                                        </div>
+                                        <h2>{{ i.title|slice:50 }}...</h2>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <div class="row mt-5">
+                        {% include 'pagination.html' %}
+                    </div>
+                </div>
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
